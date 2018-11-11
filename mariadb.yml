@@ -1,0 +1,11 @@
+- hosts: mariadb
+  pre_tasks:
+    - name: Check Linux Distributive
+      meta: end_play
+      when: ansible_distribution != "Debian"
+    - name: Check Linux Version
+      meta: end_play
+      when: ansible_distribution_release != 'stretch'
+  roles:
+    - mariadb
+

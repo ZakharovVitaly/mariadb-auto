@@ -1,0 +1,59 @@
+- name: Python-apt package installation.
+  shell: "/usr/bin/apt -y install python-apt"
+
+- name: Apt supplemental packages installation
+  apt:
+    name: ['apt-transport-https', 'ca-certificates']
+    state: latest
+    install_recommends: no
+    update_cache: yes
+
+- name: Installing Mariadb
+  apt:
+    name: ['mariadb-server', 'mariadb-client', 'python-mysqldb']
+    state: latest
+    install_recommends: no
+    update_cache: yes
+
+- name: Creating mariadb.cnf
+  template:
+   src: "50-server.cnf.j2"
+   dest: "/etc/mysql/mariadb.conf.d/50-server.cnf"
+   owner: root
+   group: root
+   mode: 0644
+
+- name: Restarting server on 0.0.0.0:3306
+  systemd:
+   name: "mysqld"
+   state: restarted
+   enabled: yes
+   daemon-reload: yes
+
+- name: Remove anonymous user
+  mysql_user:
+    name: ''
+    host_all: yes
+    state: absent
+
+- name: Set root user password
+  mysql_user: name=root
+              host="localhost"
+              password={{ root_pass }}
+              check_implicit_admin=yes
+              login_user="root"
+              login_password=""
+              state=present
+
+- name: Add technical user - {{ admin_user }}
+  mysql_user: name={{ admin_user }}
+              password={{ admin_user_pass }}
+              priv='*.*:ALL'
+              host='%'
+              state=present
+
+- name: Disallow root login remotely
+  command: 'mysql --defaults-extra-file="/etc/mysql/my.cnf" -NBe  "{{ item }}"'
+  with_items:
+    - DELETE FROM mysql.user WHERE User='root' AND Host NOT IN ('localhost', '127.0.0.1', '::1')
+  changed_when: false

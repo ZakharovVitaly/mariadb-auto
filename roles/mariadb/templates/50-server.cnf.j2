@@ -1,0 +1,42 @@
+[server]
+[mysqld]
+default-storage-engine         = InnoDB
+innodb-buffer-pool-size        = {{ (ansible_memtotal_mb*0.8/1024)|int }}G
+innodb_flush_log_at_trx_commit = 0
+innodb_lock_wait_timeout       = 10
+lock_wait_timeout              = 10
+skip-name-resolve
+low-priority-updates
+read_buffer_size               = 256K
+max_join_size                  = 256
+wait_timeout                   = 5
+net_write_timeout              = 5
+net_read_timeout               = 5
+interactive_timeout            = 2
+net_buffer_length              = 1K
+user                           = mysql
+pid-file                       = /var/run/mysqld/mysqld.pid
+socket                         = /var/run/mysqld/mysqld.sock
+port                           = {{bind_port}}
+basedir                        = /usr
+datadir                        = /var/lib/mysql
+tmpdir                         = /tmp
+lc-messages-dir                = /usr/share/mysql
+skip-external-locking
+bind-address                   = {{ bind_address}}
+key_buffer_size                = 16M
+max_allowed_packet             = 16M
+thread_stack                   = 192K
+thread_cache_size              = 16
+myisam_recover_options         = BACKUP
+query_cache_type               = off
+log_error                      = /var/log/mysql/error.log
+expire_logs_days               = 10
+max_binlog_size                = 100M
+#character-set-server           = utf8mb4
+#collation-server               = utf8mb4_general_ci
+character-set-server           = latin1
+collation-server               = latin1_general_ci
+[embedded]
+[mariadb]
+[mariadb-10.1]

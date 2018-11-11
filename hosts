@@ -1,0 +1,2 @@
+[mariadb]
+<destination host> ansible_ssh_pass='SSHP@ssw0rd' ansible_ssh_user='root' ansible_ssh_port='22'

@@ -1,0 +1,5 @@
+bind_address: 0.0.0.0
+bind_port: 3306
+admin_user: bot
+admin_user_pass: P@ssw0rd
+root_pass: P@ssw0rd
