@@ -56,3 +56,4 @@
   command: 'mysql --defaults-extra-file="/etc/mysql/my.cnf" -NBe  "{{ item }}"'
   with_items:
     - DELETE FROM mysql.user WHERE User='root' AND Host NOT IN ('localhost', '127.0.0.1', '::1')
+    - UPDATE mysql.user SET plugin='' WHERE User='root'
