@@ -23,7 +23,7 @@
    group: root
    mode: 0644
 
-- name: Restarting server on 0.0.0.0:3306
+- name: Restarting server on {{bind_host}}:{{bind_port}}
   systemd:
    name: "mysqld"
    state: restarted
@@ -52,7 +52,7 @@
               host='%'
               state=present
 
-- name: Disallow root login remotely
+- name: Disallow root login remotely and set local password
   command: 'mysql --defaults-extra-file="/etc/mysql/my.cnf" -NBe  "{{ item }}"'
   with_items:
     - DELETE FROM mysql.user WHERE User='root' AND Host NOT IN ('localhost', '127.0.0.1', '::1')
