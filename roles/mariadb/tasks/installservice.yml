@@ -23,7 +23,7 @@
    group: root
    mode: 0644
 
-- name: Restarting server on {{bind_host}}:{{bind_port}}
+- name: Restarting server on {{bind_address}}:{{bind_port}}
   systemd:
    name: "mysqld"
    state: restarted
